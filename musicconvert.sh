@@ -46,13 +46,13 @@ convertmusic() {
       filename=$(basename "$1/$f")
       extension="${filename##*.}"
       filename="${filename%.*}"
-      echo "$1/$filename.$extension to $2/$filename.opus"
       case "$extension" in
-        "alac" | "flac" | "mp3" | "ogg" | "wav")
+        "alac" | "flac" | "mp3" | "ogg" | "wav" | "m4a")
           if ! [[ -f "$2/$filename.opus" ]]; then
             ffmpeg -y -v error -nostats -i "$1/$filename.$extension" -b:a 92k -vbr on "$2/$filename.opus"
             if [[ $? -eq 0 && "$1" = "$2" ]]; then
               rm "$1/$filename.$extension"
+              echo "$1/$filename.$extension to $2/$filename.opus"
             fi
           elif [[ "$1" = "$2" ]]; then
             rm "$1/$filename.$extension"
@@ -61,11 +61,13 @@ convertmusic() {
         "jpeg")
           if ! [[ -f "$2/$filename.jpg" || "$1" = "$2" ]]; then
             cp "$1/$f" "$2/$filename.jpg"
+            echo "$1/$filename.$extension to $2/$filename.jpg"
           fi
           ;;
         *)
           if ! [[ -f "$2/$f" || "$1" = "$2" ]]; then
             cp "$1/$f" "$2/$f"
+            echo "$1/$filename.$extension to $2/$filename.$extension"
           fi
           ;;
       esac
