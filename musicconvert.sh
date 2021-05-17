@@ -9,8 +9,6 @@
 #
 # If no DEST_PATH is provided, will use SOURCE_PATH
 #
-# USAGE NOTE: If SOURCE_PATH is the same as DEST_PATH, original music files will be deleted
-#
 
 ORIG_PATH="${PWD}"
 
@@ -50,12 +48,7 @@ convertmusic() {
         "alac" | "flac" | "mp3" | "ogg" | "wav" | "m4a")
           if ! [[ -f "$2/$filename.opus" ]]; then
             ffmpeg -y -v error -nostats -i "$1/$filename.$extension" -b:a 92k -vbr on "$2/$filename.opus"
-            if [[ $? -eq 0 && "$1" = "$2" ]]; then
-              rm "$1/$filename.$extension"
-              echo "$1/$filename.$extension to $2/$filename.opus"
-            fi
-          elif [[ "$1" = "$2" ]]; then
-            rm "$1/$filename.$extension"
+            echo "$1/$filename.$extension to $2/$filename.opus"
           fi
           ;;
         "jpeg")
