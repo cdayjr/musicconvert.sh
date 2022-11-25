@@ -57,20 +57,19 @@ convertmusic() {
       local FILENAME=$(basename "$1/$FILE")
       local EXTENSION="${FILENAME##*.}"
       FILENAME="${FILENAME%.*}"
-      local ASCII_FILENAME="$(echo "$FILENAME" | uconv -x "::Latin; ::Latin-ASCII; ([^\x00-\x7F]) > ;")"
       case "$EXTENSION" in
         "alac" | "flac" | "mp3" | "ogg" | "wav" | "m4a")
-          if ! [[ -f "$2/$ASCII_FILENAME.opus" ]]; then
-            CURRENT_FILE="$2/$ASCII_FILENAME.opus"
+          if ! [[ -f "$2/$FILENAME.opus" ]]; then
+            CURRENT_FILE="$2/$FILENAME.opus"
             ffmpeg -y -v error -nostats -i "$1/$FILENAME.$EXTENSION" -b:a 92k -vbr on "$CURRENT_FILE"
             echo "$1/$FILENAME.$EXTENSION to $CURRENT_FILE"
           fi
           ;;
         *)
-          if ! [[ -f "$2/$ASCII_FILENAME.$EXTENSION" || "$1" = "$2" ]]; then
-            CURRENT_FILE="$2/$ASCII_FILENAME.$EXTENSION"
+          if ! [[ -f "$2/$FILE" || "$1" = "$2" ]]; then
+            CURRENT_FILE="$2/$FILE"
             cp "$1/$FILE" "$CURRENT_FILE"
-            echo "$1/$FILENAME.$EXTENSION to $CURRENT_FILE"
+            echo "$1/$FILENAME.$EXTENSION to $2/$FILENAME.$EXTENSION"
           fi
           ;;
       esac
