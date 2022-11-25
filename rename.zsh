@@ -8,13 +8,24 @@
 # Runs in the directory you run the script in
 #
 
-for ITEM in ./**/*; do \
-  local FILE="$(basename $ITEM)"
-	local FILTERED="$(echo $ITEM | uconv -x "::Latin; ::Latin-ASCII; ([^\x00-\x7F]) > ;" | sed 's/\?/_/g')"
-	# filter the dirname when moving files since the directory will be updated
-	# before this item is gotten to
-  local DIRECTORY="$(dirname $FILTERED)"
-	if [[ "$DIRECTORY/$FILE" != "$FILTERED" ]]; then
-		mv "$DIRECTORY/$FILE" "$FILTERED"
-	fi
-done
+local safe_rename() {
+  if [ -z "$1" ]; then
+    return 0;
+  fi
+  for ITEM in "$1"/*; do
+    if [ "$ITEM" = "." ]; then
+      continue
+    fi
+    local DIRECTORY="$(dirname "$ITEM")"
+    local FILTERED="$(basename "$ITEM" | uconv -x "::Latin; ::Latin-ASCII; ([^\x00-\x7F]) > ;" | sed 's/[\?\/'"'"'\"]/_/g')"
+    local NEW_LOCATION="$DIRECTORY/$FILTERED"
+    if [[ "$ITEM" != "$NEW_LOCATION" ]]; then
+      mv "$ITEM" "$NEW_LOCATION"
+    fi
+    if [ -d "$NEW_LOCATION" ]; then
+      safe_rename "$NEW_LOCATION"
+    fi
+  done
+}
+
+safe_rename .
