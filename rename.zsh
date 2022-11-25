@@ -17,7 +17,7 @@ local safe_rename() {
       continue
     fi
     local DIRECTORY="$(dirname "$ITEM")"
-    local FILTERED="$(basename "$ITEM" | uconv -x "::Latin; ::Latin-ASCII; ([^\x00-\x7F]) > ;" | sed 's/[\?\/'"'"'\"]/_/g')"
+    local FILTERED="$(basename "$ITEM" | uconv -x "::Latin; ::Latin-ASCII; ([^\x00-\x7F]) > ;" | sed 's/[\?\/'"'"'\"<]/_/g')"
     local NEW_LOCATION="$DIRECTORY/$FILTERED"
     if [[ "$ITEM" != "$NEW_LOCATION" ]]; then
       mv "$ITEM" "$NEW_LOCATION"
