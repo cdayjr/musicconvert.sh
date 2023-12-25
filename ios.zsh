@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 #
-# Music convert script- converts music files to ogg for iOS usage
+# Music convert script- converts music files to aac for iOS usage
 #
 # Usage: ./musicconvert.sh SOURCE_PATH DEST_PATH
 # SOURCE_PATH - source directory (the one with the music files you have already)
@@ -59,8 +59,8 @@ convertmusic() {
       FILENAME="${FILENAME%.*}"
       case "$EXTENSION" in
         "alac" | "flac" | "opus" | "wav" | "m4a")
-          if ! [[ -f "$2/$FILENAME.ogg" ]]; then
-            CURRENT_FILE="$2/$FILENAME.ogg"
+          if ! [[ -f "$2/$FILENAME.aac" ]]; then
+            CURRENT_FILE="$2/$FILENAME.aac"
             ffmpeg -y -v error -nostats -i "$1/$FILENAME.$EXTENSION" -b:a 128k -vbr on "$CURRENT_FILE"
             echo "$1/$FILENAME.$EXTENSION to $CURRENT_FILE"
           fi
