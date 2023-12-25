@@ -1,7 +1,7 @@
 # Music Convert
 
 Just a simple zsh script to convert/copy my music from other formats to opus
-using ffmpeg.
+using ffmpeg, or ogg for iOS usage.
 
 See the script source for notes on usage.
 
