@@ -47,7 +47,6 @@ convertmusic() {
   for FILE in $(ls -A1 "$1"); do
     CURRENT_FILE=""
     if [[ -d "$1/$FILE" ]]; then
-      echo "$1/$FILE"
       if ! [[ -d "$2/$FILE" ]]; then
         rm "$2/$FILE" 2>/dev/null
         mkdir -p "$2/$FILE"
@@ -61,15 +60,15 @@ convertmusic() {
         "alac" | "flac" | "opus" | "wav" | "m4a")
           if ! [[ -f "$2/$FILENAME.aac" ]]; then
             CURRENT_FILE="$2/$FILENAME.aac"
-            ffmpeg -y -v error -nostats -i "$1/$FILENAME.$EXTENSION" -b:a 128k -vbr on "$CURRENT_FILE"
             echo "$1/$FILENAME.$EXTENSION to $CURRENT_FILE"
+            ffmpeg -y -v error -nostats -i "$1/$FILENAME.$EXTENSION" -b:a 128k -vbr on "$CURRENT_FILE"
           fi
           ;;
         *)
           if ! [[ -f "$2/$FILE" || "$1" = "$2" ]]; then
             CURRENT_FILE="$2/$FILE"
-            cp "$1/$FILE" "$CURRENT_FILE"
             echo "$1/$FILENAME.$EXTENSION to $2/$FILENAME.$EXTENSION"
+            cp "$1/$FILE" "$CURRENT_FILE"
           fi
           ;;
       esac
